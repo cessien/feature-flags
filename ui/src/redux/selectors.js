@@ -1,0 +1,1 @@
+export const getAllFeatures = store => store.features;
