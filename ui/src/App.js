@@ -1,5 +1,6 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -30,20 +31,18 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
+  feature: {
+    paddingTop: '5em',
+    paddingBottom: '5em'
+  },
   featureList: {
     width: "100vmin",
   },
   featureDescription: {
     color: "#9C9C9C",
   },
-  featureFilterList: {
-    display: 'flex',
-    flexDirection: 'row',
-    padding: 0,
-  },
   featureFilterListItem: {
-    paddingLeft: '0em',
-    paddingRight: '.5em'
+    margin: '.25em'
   }
 }));
 
@@ -65,7 +64,7 @@ const features = [
   {
     key: "app.some-feature",
     description: "Some feature we want to control",
-    enabled: true,
+    enabled: false,
     users: [
       "hermione",
       "sma",
@@ -79,32 +78,33 @@ const features = [
   },
 ]
 
-export default function App() {
-  const classes = useStyles();
+const selectFeatures = state => state.features
 
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-  });
+export default function App() {
+  const state = useState({features: []})
+  const classes = useStyles()
+
+  const feats = useSelector(selectFeatures)
+  const dispatch = useDispatch()
 
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    dispatch({ type: 'flags/featureToggled', payload: event.target.checked })
   };
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="lg" alignLeft>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <FlagIcon />
         </Avatar>
-        <Typography component="h3" variant="h3">
+        <Typography component="h3" variant="h3" alignLeft>
           Feature Flags
         </Typography>
         <List className={classes.featureList}>
-          {features.map(l => {
-          return <ListItem key={l} divider>
-            <Grid container spacing={2}>
+          {feats.map(l => {
+          return <ListItem key={l} divider className={classes.feature}>
+            <Grid container spacing={2} alignContent="center">
               <Grid item xs={2}>
                 <FormGroup>
                   <FormControlLabel control={
@@ -125,14 +125,10 @@ export default function App() {
               <Grid item xs={1}></Grid>
               <Grid item xs={1}><FilterListIcon /></Grid>
               <Grid item xs={10}>
-                <List className={classes.featureFilterList}>
-                  {l.groups.map(g => {
-                    return <ListItem className={classes.featureFilterListItem} key={g}><Chip icon={<GroupIcon />} color='primary' label={g} onDelete={console.log} /></ListItem>
-                  })}
-                  {l.users.map(u => {
-                    return <ListItem className={classes.featureFilterListItem} key={u}><Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} label={u.replace(/^-/,'')} onDelete={console.log} /></ListItem>
-                  })}
-                </List>
+                <Box flexDirection="row">
+                  {l.groups.map(g => <Chip icon={<GroupIcon />} color='primary' label={g} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                  {l.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                </Box>
               </Grid>
             </Grid>
           </ListItem>
