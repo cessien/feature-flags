@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import features from "./features";
+import featuresReducer from "./features";
 
-export default combineReducers({ features });
+export default combineReducers({ featuresReducer });

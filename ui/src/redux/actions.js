@@ -6,7 +6,7 @@ import {
 
 export const addFeature = feature => ({
     type: ADD_FEATURE,
-    payload: { ...feature },
+    payload: feature,
 })
 
 export const getFeatures = () => ({
@@ -14,7 +14,10 @@ export const getFeatures = () => ({
     payload: {},
 })
 
-export const toggleFeature = feature => ({
+export const toggleFeature = (key, status) => ({
     type: TOGGLE_FEATURE,
-    payload: { ...feature },
+    payload: {
+        key: key,
+        enabled: status,
+    },
 })
