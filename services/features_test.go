@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	db "github.com/antoineaugusti/feature-flags/db"
-	m "github.com/antoineaugusti/feature-flags/models"
 	"github.com/boltdb/bolt"
+	db "github.com/cessien/feature-flags/db"
+	m "github.com/cessien/feature-flags/models"
 	"github.com/stretchr/testify/assert"
 )
 

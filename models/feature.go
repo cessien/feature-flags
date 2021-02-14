@@ -5,7 +5,7 @@ import (
 	"hash/crc32"
 	"regexp"
 
-	helpers "github.com/antoineaugusti/feature-flags/helpers"
+	helpers "github.com/cessien/feature-flags/helpers"
 )
 
 // Represents a feature flag

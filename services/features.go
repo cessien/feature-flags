@@ -3,9 +3,9 @@ package services
 import (
 	"fmt"
 
-	m "github.com/antoineaugusti/feature-flags/models"
-	repos "github.com/antoineaugusti/feature-flags/repos"
 	"github.com/boltdb/bolt"
+	m "github.com/cessien/feature-flags/models"
+	repos "github.com/cessien/feature-flags/repos"
 )
 
 type FeatureService struct {

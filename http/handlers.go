@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	m "github.com/antoineaugusti/feature-flags/models"
-	services "github.com/antoineaugusti/feature-flags/services"
+	m "github.com/cessien/feature-flags/models"
+	services "github.com/cessien/feature-flags/services"
 	"github.com/gorilla/mux"
 )
 

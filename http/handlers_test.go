@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	db "github.com/antoineaugusti/feature-flags/db"
-	m "github.com/antoineaugusti/feature-flags/models"
-	s "github.com/antoineaugusti/feature-flags/services"
 	"github.com/boltdb/bolt"
+	db "github.com/cessien/feature-flags/db"
+	m "github.com/cessien/feature-flags/models"
+	s "github.com/cessien/feature-flags/services"
 	"github.com/stretchr/testify/assert"
 )
 

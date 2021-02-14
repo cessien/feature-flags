@@ -1,7 +1,7 @@
-[![Travis CI](https://img.shields.io/travis/AntoineAugusti/feature-flags/master.svg?style=flat-square)](https://travis-ci.org/AntoineAugusti/feature-flags)
-[![Software License](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)](https://github.com/AntoineAugusti/feature-flags/blob/master/LICENSE.md)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/AntoineAugusti/feature-flags)
-[![Coverage Status](http://codecov.io/github/AntoineAugusti/feature-flags/coverage.svg?branch=master)](http://codecov.io/github/AntoineAugusti/feature-flags?branch=master)
+[![Travis CI](https://img.shields.io/travis/cessien/feature-flags/master.svg?style=flat-square)](https://travis-ci.org/cessien/feature-flags)
+[![Software License](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)](https://github.com/cessien/feature-flags/blob/master/LICENSE.md)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/cessien/feature-flags)
+[![Coverage Status](http://codecov.io/github/cessien/feature-flags/coverage.svg?branch=master)](http://codecov.io/github/cessien/feature-flags?branch=master)
 
 # Feature flags API in Go
 This package uses [boltdb/bolt](https://github.com/boltdb/bolt), a key-value store for storage. You do not need to connect another database! The HTTP routing is done by [gorilla/mux](http://www.gorillatoolkit.org/pkg/mux).
@@ -23,12 +23,12 @@ If you want to know everything about feature flags, check out [this article](htt
 ## Getting started
 You can grab this package with the following command:
 ```
-go get gopkg.in/antoineaugusti/feature-flags.v0
+go get gopkg.in/cessien/feature-flags.v0
 ```
 
 And then build it:
 ```
-cd ${GOPATH%/}/src/github.com/antoineaugusti/feature-flags
+cd ${GOPATH%/}/src/github.com/cessien/feature-flags
 go build
 ```
 

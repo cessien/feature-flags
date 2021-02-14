@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	db "github.com/antoineaugusti/feature-flags/db"
-	h "github.com/antoineaugusti/feature-flags/http"
-	s "github.com/antoineaugusti/feature-flags/services"
 	"github.com/boltdb/bolt"
+	db "github.com/cessien/feature-flags/db"
+	h "github.com/cessien/feature-flags/http"
+	s "github.com/cessien/feature-flags/services"
 )
 
 func main() {
