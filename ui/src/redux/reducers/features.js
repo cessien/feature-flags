@@ -1,4 +1,4 @@
-import { ADD_FEATURE, GET_FEATURES, TOGGLE_FEATURE } from "../actionTypes";
+import { ADD_FEATURE, GET_FEATURES, REMOVE_FEATURE, TOGGLE_FEATURE } from "../actionTypes";
 
 const initialState = {
   features: {},
@@ -39,9 +39,6 @@ let features = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_FEATURE: {
-      const encaped = {}
-      encaped[action.payload.key] = action.payload
- 
       return {
         ...state,
         features: {
@@ -51,6 +48,18 @@ export default function(state = initialState, action) {
           },
         },
       };
+    }
+    case REMOVE_FEATURE: {
+      return {
+        ...state,
+        features: Object.keys(state.features).reduce((result, key) => {
+          if (key != action.payload.key) {
+            result[key] = state.features[key];
+          }
+
+          return result;
+        }, {})
+      }
     }
     case GET_FEATURES: {
         // refresh from server

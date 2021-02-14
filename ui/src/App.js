@@ -48,7 +48,7 @@ const asyncRemoveFeature = (feature) => {
     return Api.removeFeature(feature).then(
       resp => {
         resp.json().then(f => {
-          dispatch(removeFeature(f));
+          dispatch(removeFeature(feature));
         })
       },
       e => console.log(e)
@@ -65,15 +65,19 @@ class App extends React.Component {
     this.props.asyncAddFeature({
       key: "app_some_other_feature_" + Math.floor(Math.random() * 10000),
       description: "Some other feature we want to control",
-      enabled: true,
+      enabled: Math.random() >= .2,
       users: [
       ],
       groups: [
         "beta-testers",
         "experimental2"
       ],
-      percentage: 10
+      percentage: Math.floor(Math.random() * 100)
     });
+  }
+
+  handleRemoveFeature = (feature) => (event) => {
+      this.props.asyncRemoveFeature(feature)
   }
 
   render() {
@@ -96,7 +100,7 @@ class App extends React.Component {
                 Create Feature
               </Button>
             </ListItem>
-            {features && Object.keys(features).map((l,i) => <Feature key={l} row={l} feature={features[l]} />)}
+            {features && Object.keys(features).map((l,i) => <Feature key={l} row={l} feature={features[l]} onDelete={this.handleRemoveFeature(features[l])} />)}
           </List>
         </div>
       </Container>
@@ -104,4 +108,4 @@ class App extends React.Component {
   }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { getFeatures, asyncAddFeature })(App))
+export default withStyles(styles)(connect(mapStateToProps, { getFeatures, asyncAddFeature, asyncRemoveFeature })(App))

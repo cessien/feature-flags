@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleFeature } from '../redux/actions';
+import AddBadge from './AddBadge';
 import Grid from '@material-ui/core/Grid';
 import GroupIcon from '@material-ui/icons/Group';
 import PersonIcon from '@material-ui/icons/Person';
 import NoPersonIcon from '@material-ui/icons/NotInterested';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from '@material-ui/icons/FlashOn';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -15,7 +17,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Chip from '@material-ui/core/Chip';
-import AddBadge from './AddBadge';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
     feature: {
@@ -65,9 +67,14 @@ class Feature extends React.Component {
             </Grid>
             <Grid item xs={10}>
                 <Grid container spacing={2}>
-                <Grid item xs={8}><Typography component="div"><Box fontWeight="bold">{feature.key}</Box></Typography></Grid>
-                <Grid item xs={4}><LinearProgress variant="determinate" value={feature.percentage} /></Grid>
-                <Grid item xs={12}><Typography component="div"><Box className={classes.featureDescription}>{feature.description}</Box></Typography></Grid>
+                    <Grid item xs={8}><Typography component="div"><Box fontWeight="bold">{feature.key}</Box></Typography></Grid>
+                    <Grid item xs={4}><LinearProgress variant="determinate" value={feature.percentage} /></Grid>
+                    <Grid item xs={11}><Typography component="div"><Box className={classes.featureDescription}>{feature.description}</Box></Typography></Grid>
+                    <Grid item xs={1}>
+                        <IconButton size='medium' onClick={this.props.onDelete}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid item xs={1}></Grid>

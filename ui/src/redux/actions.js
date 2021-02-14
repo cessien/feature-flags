@@ -13,14 +13,17 @@ export const addFeature = feature => ({
     payload: feature,
 })
 
-export const removeFeature = feature => {}
+export const removeFeature = feature => ({
+    type: REMOVE_FEATURE,
+    payload: feature,
+})
 
 export const getFeatures = () => ({
     type: GET_FEATURES,
     payload: {},
 })
 
-export const toggleFeature = async (feature, status) => ({
+export const toggleFeature = (feature, status) => ({
     type: TOGGLE_FEATURE,
     payload: {
         key: feature.key,

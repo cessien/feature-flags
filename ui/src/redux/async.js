@@ -45,10 +45,12 @@ export function getFeatures() {
     })
 }
 
-export default {
+const Api = {
     getFeatures,
     getFeature,
     addFeature,
     removeFeature,
     updateFeature,
 }
+
+export default Api

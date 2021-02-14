@@ -1,4 +1,4 @@
-import React, { setState } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Box from '@material-ui/core/Box';
@@ -52,7 +52,7 @@ class Addbadge extends React.Component {
     }
 
     getIcon = (type, exclude) => {
-        if (type == "group") {
+        if (type === "group") {
             return <GroupIcon />
         }
 
@@ -82,7 +82,7 @@ class Addbadge extends React.Component {
             icon={this.getIcon(this.props.type, this.state.exclusion)} 
             label={"add " + this.props.type}
             variant="outlined"
-            color={this.props.type=='group' ? 'primary' : 'secondary'}
+            color={this.props.type==='group' ? 'primary' : 'secondary'}
             clickable
             deleteIcon={<AddIcon />} 
             onDelete={this.enterEdit}
