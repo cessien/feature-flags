@@ -1,8 +1,9 @@
 import './App.css';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getFeatures, addFeature } from './redux/actions';
+import { getFeatures, addFeature, removeFeature } from './redux/actions';
 import { getAllFeatures } from './redux/selectors';
+import Api from './redux/async';
 import Header from './components/Header';
 import Feature from './components/Feature';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -29,14 +30,40 @@ const mapStateToProps = state => {
   return { ...getAllFeatures(state) };
 }
 
+const asyncAddFeature = (feature) => {
+  return function (dispatch) {
+    return Api.addFeature(feature).then(
+      resp => {
+        resp.json().then(f => {
+          dispatch(addFeature(f));
+        })
+      },
+      e => console.log(e)
+    );
+  }
+}
+
+const asyncRemoveFeature = (feature) => {
+  return function (dispatch) {
+    return Api.removeFeature(feature).then(
+      resp => {
+        resp.json().then(f => {
+          dispatch(removeFeature(f));
+        })
+      },
+      e => console.log(e)
+    );
+  }
+}
+
 class App extends React.Component {
   componentDidMount() {
     this.props.getFeatures();
   }
 
   handleAddFeature = (event) => {
-    this.props.addFeature({
-      key: "app.some-other-feature",
+    this.props.asyncAddFeature({
+      key: "app_some_other_feature_" + Math.floor(Math.random() * 10000),
       description: "Some other feature we want to control",
       enabled: true,
       users: [
@@ -77,4 +104,4 @@ class App extends React.Component {
   }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { getFeatures, addFeature })(App))
+export default withStyles(styles)(connect(mapStateToProps, { getFeatures, asyncAddFeature })(App))

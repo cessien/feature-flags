@@ -15,6 +15,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Chip from '@material-ui/core/Chip';
+import AddBadge from './AddBadge';
 
 const styles = theme => ({
     feature: {
@@ -34,8 +35,16 @@ const mapStateToProps = (state, s) => {
 }
 
 class Feature extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            addUserActive: false,
+            addGroupActive: false
+        };
+    }
+
     handleToggle = (event) => {
-        this.props.toggleFeature(this.props.row, event.target.checked)
+        this.props.toggleFeature(this.props.feature, event.target.checked)
     }
 
     render() {
@@ -65,8 +74,10 @@ class Feature extends React.Component {
             <Grid item xs={1}><FilterListIcon /></Grid>
             <Grid item xs={10}>
                 <Box flexDirection="row">
-                {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={console.log} className={classes.featureFilterListItem} />)}
-                {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                    {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                    {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                    <AddBadge type="group" className={classes.featureFilterListItem} />
+                    <AddBadge type="user" className={classes.featureFilterListItem} />
                 </Box>
             </Grid>
             </Grid>
@@ -74,4 +85,4 @@ class Feature extends React.Component {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { toggleFeature })(Feature))
+export default withStyles(styles)(connect(mapStateToProps, { toggleFeature })(Feature));

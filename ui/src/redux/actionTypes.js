@@ -1,3 +1,7 @@
 export const GET_FEATURES = "features/get"
 export const ADD_FEATURE = "features/add"
+export const REMOVE_FEATURE = "features/remove"
 export const TOGGLE_FEATURE = "feature/toggle"
+export const UPDATE_FEATURE_GROUPS = "feature/groups"
+export const UPDATE_FEATURE_USERS = "feature/users"
+export const UPDATE_FEATURE_PERCENTAGE = "feature/percentage"

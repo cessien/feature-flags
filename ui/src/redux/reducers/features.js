@@ -5,8 +5,8 @@ const initialState = {
 };
 
 let features = {
-    "pr.ui-designer-hint": {
-      key: "pr.ui-designer-hint",
+    "pr_ui_designer_hint": {
+      key: "pr_ui_designer_hint",
       description: "Users get hint notifications to tag UI designers on PRs",
       enabled: true,
       users: [
@@ -19,8 +19,8 @@ let features = {
       ],
       percentage: 75
     },
-    "app.some-feature": {
-      key: "app.some-feature",
+    "app_some_feature": {
+      key: "app_some_feature",
       description: "Some feature we want to control",
       enabled: false,
       users: [
@@ -44,7 +44,12 @@ export default function(state = initialState, action) {
  
       return {
         ...state,
-        features: {...Object.assign({}, state.features, encaped)},
+        features: {
+          ...state.features,
+          [action.payload.key]: {
+            ...action.payload,
+          },
+        },
       };
     }
     case GET_FEATURES: {
