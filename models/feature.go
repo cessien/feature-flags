@@ -12,6 +12,8 @@ import (
 type FeatureFlag struct {
 	// The key of a feature flag
 	Key string `json:"key"`
+	// A description of the feature to be displayed in the UI
+	Description string `json:"description"`
 	// Tell if a feature flag is enabled. If set to false,
 	// the feature flag can still be partially enabled thanks to
 	// the Users, Groups and Percentage properties
@@ -66,6 +68,10 @@ func (f FeatureFlag) UserHasAccess(user uint32) bool {
 	// - if the feature is partially enabled and he has been given access explicity
 	// - if the feature is partially enabled and he is in the allowed percentage
 	return f.IsEnabled() || (f.IsPartiallyEnabled() && (f.userInUsers(user) || f.userIsAllowedByPercentage(user)))
+}
+
+func (f FeatureFlag) hasDescription() bool {
+	return f.Description != ""
 }
 
 // Tell if specific users have access to the feature

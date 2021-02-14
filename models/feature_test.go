@@ -77,6 +77,19 @@ func TestPartiallyEnabled(t *testing.T) {
 	assert.True(t, f.IsEnabled())
 }
 
+func TestHasDescription(t *testing.T) {
+	f := FeatureFlag{
+		Key:         "foo",
+		Description: "this is a desc of the feat",
+		Enabled:     false,
+		Users:       []uint32{42},
+		Groups:      []string{"bar"},
+		Percentage:  25,
+	}
+
+	assert.True(t, f.hasDescription())
+}
+
 func TestGroupHasAccess(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
