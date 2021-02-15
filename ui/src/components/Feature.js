@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleFeature, updateFeatureGroups, updateFeatureUsers } from '../redux/actions';
+import Api from '../redux/async';
 import AddBadge from './AddBadge';
 import Grid from '@material-ui/core/Grid';
 import GroupIcon from '@material-ui/icons/Group';
@@ -18,7 +19,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-import Api from '../redux/async';
 
 const styles = theme => ({
     feature: {
@@ -43,6 +43,19 @@ const asyncUpdateFeatureGroups = (feature) => {
             resp => {
                 resp.json().then(f => {
                     dispatch(updateFeatureGroups(feature.key, feature.groups));
+                })
+            },
+            e => console.log(e)
+        );
+    }
+}
+
+const asyncUpdateFeatureUsers = (feature) => {
+    return function (dispatch) {
+        return Api.updateFeature(feature).then(
+            resp => {
+                resp.json().then(f => {
+                    dispatch(updateFeatureUsers(feature.key, feature.users));
                 })
             },
             e => console.log(e)
@@ -81,6 +94,26 @@ class Feature extends React.Component {
         this.props.asyncUpdateFeatureGroups(feature);
     }
 
+    handleAddUser = (user) => {
+        const { feature } = this.props;
+
+        const alernativeUserCandidate = user[0] !== '-' ? `-${user}` : user.slice(1);
+
+        if (!feature.users.includes(user) && !feature.users.includes(alernativeUserCandidate)) {
+            feature.users = feature.users.concat([user]);
+        }
+
+        this.props.asyncUpdateFeatureUsers(feature);
+    }
+
+    handleRemoveUser = (user) => (event) => {
+        const { feature } = this.props;
+
+        feature.users.splice(feature.users.indexOf(user),1);
+
+        this.props.asyncUpdateFeatureUsers(feature);
+    }
+
     render() {
         const { classes, feature } = this.props;
 
@@ -114,9 +147,9 @@ class Feature extends React.Component {
             <Grid item xs={10}>
                 <Box flexDirection="row">
                     {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={this.handleRemoveGroup(g)} className={classes.featureFilterListItem} />)}
-                    {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                    {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={this.handleRemoveUser(u)} className={classes.featureFilterListItem} />)}
                     <AddBadge type="group" className={classes.featureFilterListItem} onCreate={this.handleAddGroup} />
-                    <AddBadge type="user" className={classes.featureFilterListItem} />
+                    <AddBadge type="user" className={classes.featureFilterListItem} onCreate={this.handleAddUser}/>
                 </Box>
             </Grid>
             </Grid>
@@ -124,4 +157,4 @@ class Feature extends React.Component {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { toggleFeature, asyncUpdateFeatureGroups })(Feature));
+export default withStyles(styles)(connect(mapStateToProps, { toggleFeature, asyncUpdateFeatureGroups, asyncUpdateFeatureUsers })(Feature));

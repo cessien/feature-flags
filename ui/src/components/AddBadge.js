@@ -50,8 +50,10 @@ class Addbadge extends React.Component {
     }
 
     create = () => {
-        this.props.onCreate(this.state.text)
-        this.cancelEdit()
+        if (this.props.onCreate) {
+            this.props.onCreate(this.state.text)
+            this.cancelEdit()
+        }
     }
 
     getIcon = (type, exclude) => {
@@ -68,6 +70,17 @@ class Addbadge extends React.Component {
         })
     }
 
+    handleSubmit = (event) => {
+        switch(event.key) {
+            case 'Enter':
+                this.create();
+                break;
+            case 'Escape':
+                this.cancelEdit();
+            default:
+        }
+    }
+
     renderEditableGroup = (classes) => (
         <Box 
             flexDirection="row"
@@ -76,7 +89,7 @@ class Addbadge extends React.Component {
             maxWidth='14em'
             className={classes.container}
         >
-            <TextField label={this.props.type + " name"} value={this.state.text} onChange={this.handleTextChange} />
+            <TextField label={this.props.type + " name"} value={this.state.text} focused autoFocus onKeyUp={this.handleSubmit} onChange={this.handleTextChange} />
             <IconButton size='small' edge='start' onClick={this.cancelEdit}>
                 <CancelIcon className={classes.cancelIcon} />
             </IconButton>
