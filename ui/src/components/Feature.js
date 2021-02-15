@@ -14,10 +14,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import { ListItem } from '@material-ui/core';
 import Switch from '@material-ui/core/Switch';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Input from '@material-ui/core/Input';
 import Slider from '@material-ui/core/Slider';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -92,6 +90,13 @@ const asyncUpdateFeaturePercentage = (feature) => {
 }
 
 class Feature extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            percentage: props.feature.percentage,
+        };
+    }
+
     handleToggle = (event) => {
         const f = {
             ...this.props.feature,
@@ -165,15 +170,16 @@ class Feature extends React.Component {
             <Grid item xs={10}>
                 <Grid container spacing={2}>
                     <Grid item xs={7}><Typography component="div"><Box fontWeight="bold">{feature.key}</Box></Typography></Grid>
-                    {/* <Grid item xs={4}><LinearProgress variant="determinate" value={feature.percentage} /></Grid> */}
                     <Grid item xs={5}>
                         <Slider
                             defaultValue={feature.percentage}
+                            value={this.state.percentage}
                             valueLabelDisplay="auto"
                             step={10}
                             marks
                             min={0}
                             max={100}
+                            onChange={(e,v) => this.setState({percentage: v})}
                             onChangeCommitted={this.handleUpdatePercentage}
                         />
                     </Grid>
