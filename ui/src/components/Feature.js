@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleFeature } from '../redux/actions';
+import { toggleFeature, updateFeatureGroups, updateFeatureUsers } from '../redux/actions';
 import AddBadge from './AddBadge';
 import Grid from '@material-ui/core/Grid';
 import GroupIcon from '@material-ui/icons/Group';
@@ -18,6 +18,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
+import Api from '../redux/async';
 
 const styles = theme => ({
     feature: {
@@ -36,6 +37,19 @@ const mapStateToProps = (state, s) => {
     return state
 }
 
+const asyncUpdateFeatureGroups = (feature) => {
+    return function (dispatch) {
+        return Api.updateFeature(feature).then(
+            resp => {
+                resp.json().then(f => {
+                    dispatch(updateFeatureGroups(feature.key, feature.groups));
+                })
+            },
+            e => console.log(e)
+        );
+    }
+}
+
 class Feature extends React.Component {
     constructor(props) {
         super(props);
@@ -46,7 +60,27 @@ class Feature extends React.Component {
     }
 
     handleToggle = (event) => {
-        this.props.toggleFeature(this.props.feature, event.target.checked)
+        this.props.toggleFeature(this.props.feature.key, event.target.checked)
+    }
+
+    handleAddGroup = (group) => {
+        const { feature } = this.props;
+
+        if (!feature.groups.includes(group)) {
+            feature.groups = feature.groups.concat([group]);
+        }
+
+        this.props.asyncUpdateFeatureGroups(feature);
+    }
+
+    handleRemoveGroup = (group) => {
+        const { feature } = this.props;
+
+        if (feature.groups.includes(group)) {
+            feature.groups = feature.groups.splice(0,1,group);
+        }
+
+        this.props.asyncUpdateFeatureGroups(feature);
     }
 
     render() {
@@ -83,7 +117,7 @@ class Feature extends React.Component {
                 <Box flexDirection="row">
                     {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={console.log} className={classes.featureFilterListItem} />)}
                     {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
-                    <AddBadge type="group" className={classes.featureFilterListItem} />
+                    <AddBadge type="group" className={classes.featureFilterListItem} onCreate={this.handleAddGroup} />
                     <AddBadge type="user" className={classes.featureFilterListItem} />
                 </Box>
             </Grid>
@@ -92,4 +126,4 @@ class Feature extends React.Component {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { toggleFeature })(Feature));
+export default withStyles(styles)(connect(mapStateToProps, { toggleFeature, asyncUpdateFeatureGroups })(Feature));

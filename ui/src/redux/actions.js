@@ -23,20 +23,34 @@ export const getFeatures = () => ({
     payload: {},
 })
 
-export const toggleFeature = (feature, status) => ({
+export const toggleFeature = (key, status) => ({
     type: TOGGLE_FEATURE,
     payload: {
-        key: feature.key,
+        key: key,
         enabled: status,
     },
 })
 
-export const addGroupToFeature = (feature, group) => {}
+export const updateFeatureGroups = (key, groups) => ({
+    type: UPDATE_FEATURE_GROUPS,
+    payload: {
+        key: key,
+        groups: groups,
+    }
+})
 
-export const removeGroupFromFeature = (feature, group) => {}
+export const updateFeatureUsers = (key, users) => ({
+    type: UPDATE_FEATURE_USERS,
+    payload: {
+        key: key,
+        users: users,
+    }
+})
 
-export const addUserToFeature = (feature, user) => {}
-
-export const removeUserFromFeature = (feature, user) => {}
-
-export const setFeaturePercentage = (feature, percentage) => {}
+export const setFeaturePercentage = (key, percentage) => ({
+    type: UPDATE_FEATURE_PERCENTAGE,
+    payload: {
+        key: key,
+        percentage: percentage,
+    }
+})

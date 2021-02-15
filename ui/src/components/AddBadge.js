@@ -32,6 +32,7 @@ class Addbadge extends React.Component {
         this.state = {
             mode: 'chip',
             exclusion: false,
+            text: "",
         };
     }
 
@@ -44,11 +45,13 @@ class Addbadge extends React.Component {
     cancelEdit = (event) => {
         this.setState({
             mode: 'chip',
+            text: '',
         })
     }
 
-    createGroup = (event) => {
-        // dispatch action
+    create = () => {
+        this.props.onCreate(this.state.text)
+        this.cancelEdit()
     }
 
     getIcon = (type, exclude) => {
@@ -59,6 +62,12 @@ class Addbadge extends React.Component {
         return exclude ? <NoPersonIcon /> : <PersonIcon />
     }
 
+    handleTextChange = (event) => {
+        this.setState({
+            text: event.target.value,
+        })
+    }
+
     renderEditableGroup = (classes) => (
         <Box 
             flexDirection="row"
@@ -67,11 +76,11 @@ class Addbadge extends React.Component {
             maxWidth='14em'
             className={classes.container}
         >
-            <TextField label={this.props.type + " name"} />
+            <TextField label={this.props.type + " name"} value={this.state.text} onChange={this.handleTextChange} />
             <IconButton size='small' edge='start' onClick={this.cancelEdit}>
                 <CancelIcon className={classes.cancelIcon} />
             </IconButton>
-            <IconButton size='small' edge='end' onClick={this.createGroup}>
+            <IconButton size='small' edge='end' onClick={this.create}>
                 <DoneIcon className={classes.doneIcon} />
             </IconButton>
         </Box>
