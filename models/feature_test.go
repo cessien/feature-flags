@@ -10,7 +10,7 @@ func TestEnabled(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
 		Enabled:    true,
-		Users:      []uint32{},
+		Users:      []string{},
 		Groups:     []string{},
 		Percentage: 20,
 	}
@@ -29,7 +29,7 @@ func TestValidate(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
 		Enabled:    false,
-		Users:      []uint32{},
+		Users:      []string{},
 		Groups:     []string{},
 		Percentage: 101,
 	}
@@ -57,7 +57,7 @@ func TestPartiallyEnabled(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
 		Enabled:    false,
-		Users:      []uint32{},
+		Users:      []string{},
 		Groups:     []string{},
 		Percentage: 20,
 	}
@@ -69,7 +69,7 @@ func TestPartiallyEnabled(t *testing.T) {
 	assert.True(t, f.IsPartiallyEnabled())
 
 	f.Groups = []string{}
-	f.Users = []uint32{22}
+	f.Users = []string{"parrot"}
 	assert.True(t, f.IsPartiallyEnabled())
 
 	f.Percentage = 100
@@ -82,7 +82,7 @@ func TestHasDescription(t *testing.T) {
 		Key:         "foo",
 		Description: "this is a desc of the feat",
 		Enabled:     false,
-		Users:       []uint32{42},
+		Users:       []string{"mark"},
 		Groups:      []string{"bar"},
 		Percentage:  25,
 	}
@@ -94,7 +94,7 @@ func TestGroupHasAccess(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
 		Enabled:    false,
-		Users:      []uint32{42},
+		Users:      []string{"mark"},
 		Groups:     []string{"bar"},
 		Percentage: 20,
 	}
@@ -120,24 +120,24 @@ func TestUserHasAccess(t *testing.T) {
 	f := FeatureFlag{
 		Key:        "foo",
 		Enabled:    false,
-		Users:      []uint32{42},
+		Users:      []string{"mark"},
 		Groups:     []string{},
 		Percentage: 20,
 	}
 	// Make sure the feature is not enabled
 	assert.False(t, f.IsEnabled())
 
-	assert.True(t, f.UserHasAccess(42))
-	assert.False(t, f.UserHasAccess(1337))
+	assert.True(t, f.UserHasAccess("mark"))
+	assert.False(t, f.UserHasAccess("jane"))
 
-	f.Users = []uint32{42, 1337}
-	assert.True(t, f.UserHasAccess(1337))
+	f.Users = []string{"mark", "polly"}
+	assert.True(t, f.UserHasAccess("polly"))
 
 	f.Enabled = true
-	assert.True(t, f.UserHasAccess(222))
+	assert.True(t, f.UserHasAccess("tod"))
 
-	f.Users = []uint32{}
+	f.Users = []string{}
 	f.Percentage = 100
 	f.Enabled = false
-	assert.True(t, f.UserHasAccess(222))
+	assert.True(t, f.UserHasAccess("tod"))
 }

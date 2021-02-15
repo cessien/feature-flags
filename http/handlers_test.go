@@ -51,7 +51,7 @@ func TestAddFeatureFlag(t *testing.T) {
 		t, res,
 		"homepage_v2",
 		false,
-		[]int{2},
+		[]string{"b"},
 		[]string{"dev", "admin"},
 		0,
 	)
@@ -86,7 +86,7 @@ func TestGetFeatureFlag(t *testing.T) {
 		t, res,
 		"homepage_v2",
 		false,
-		[]int{2},
+		[]string{"b"},
 		[]string{"dev", "admin"},
 		0,
 	)
@@ -128,7 +128,7 @@ func TestEditFeatureFlag(t *testing.T) {
 	// Edit the default dummy feature
 	payload := `{
       "enabled":true,
-      "users":[1,2],
+      "users":["a","b"],
       "groups":[
          "a",
          "b"
@@ -144,7 +144,7 @@ func TestEditFeatureFlag(t *testing.T) {
 		t, res,
 		"homepage_v2",
 		true,
-		[]int{1, 2},
+		[]string{"a", "b"},
 		[]string{"a", "b"},
 		42,
 	)
@@ -187,7 +187,7 @@ func TestAccessFeatureFlags(t *testing.T) {
 	assert422Response(t, res)
 
 	// Access thanks to the user ID
-	reader = strings.NewReader(`{"user":2}`)
+	reader = strings.NewReader(`{"user":"b"}`)
 	request, _ = http.NewRequest("POST", url, reader)
 	res, _ = http.DefaultClient.Do(request)
 
@@ -196,7 +196,7 @@ func TestAccessFeatureFlags(t *testing.T) {
 	assert.Equal(t, "homepage_v2", features[0].Key)
 
 	// No access because of the user ID
-	reader = strings.NewReader(`{"user":0}`)
+	reader = strings.NewReader(`{"user":"z"}`)
 	request, _ = http.NewRequest("POST", url, reader)
 	res, _ = http.DefaultClient.Do(request)
 
@@ -240,21 +240,21 @@ func TestAccessFeatureFlag(t *testing.T) {
 	assert422Response(t, res)
 
 	// Access thanks to the user ID
-	reader = strings.NewReader(`{"user":2}`)
+	reader = strings.NewReader(`{"user":"b"}`)
 	request, _ = http.NewRequest("POST", url, reader)
 	res, _ = http.DefaultClient.Do(request)
 
 	assertAccessToTheFeature(t, res)
 
 	// No access because of the user ID
-	reader = strings.NewReader(`{"user":3}`)
+	reader = strings.NewReader(`{"user":"c"}`)
 	request, _ = http.NewRequest("POST", url, reader)
 	res, _ = http.DefaultClient.Do(request)
 
 	assertNoAccessToTheFeature(t, res)
 
 	// Access thanks to the group
-	reader = strings.NewReader(`{"user":3, "groups":["dev", "foo"]}`)
+	reader = strings.NewReader(`{"user":"c", "groups":["dev", "foo"]}`)
 	request, _ = http.NewRequest("POST", url, reader)
 	res, _ = http.DefaultClient.Do(request)
 
@@ -327,7 +327,7 @@ func getDummyFeaturePayload() string {
 	return `{
       "key":"homepage_v2",
       "enabled":false,
-      "users":[2],
+      "users":["b"],
       "groups":[
          "dev",
          "admin"
@@ -336,13 +336,13 @@ func getDummyFeaturePayload() string {
     }`
 }
 
-func assertJSONMatchesStructure(t *testing.T, res *http.Response, key string, enabled bool, users []int, groups []string, percentage int) {
+func assertJSONMatchesStructure(t *testing.T, res *http.Response, key string, enabled bool, users []string, groups []string, percentage int) {
 	var feature m.FeatureFlag
 	json.NewDecoder(res.Body).Decode(&feature)
 
 	assert.Equal(t, key, feature.Key)
 	assert.Equal(t, enabled, feature.Enabled)
-	assert.Equal(t, intsToUints32(users), feature.Users)
+	assert.Equal(t, users, feature.Users)
 	assert.Equal(t, groups, feature.Groups)
 	assert.Equal(t, uint32(percentage), feature.Percentage)
 }

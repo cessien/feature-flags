@@ -71,7 +71,7 @@ func TestUpdateFeature(t *testing.T) {
 
 	newFeature := getDummyFeature()
 	newFeature.Enabled = true
-	newFeature.Users = []uint32{1, 2}
+	newFeature.Users = []string{"a", "b"}
 	newFeature.Groups = []string{"c", "d"}
 	newFeature.Percentage = uint32(22)
 
@@ -140,7 +140,7 @@ func getDummyFeature() m.FeatureFlag {
 	return m.FeatureFlag{
 		Key:        "foo",
 		Enabled:    false,
-		Users:      []uint32{22},
+		Users:      []string{"parrot"},
 		Groups:     []string{},
 		Percentage: 42,
 	}

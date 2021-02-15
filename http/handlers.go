@@ -27,7 +27,7 @@ type APIMessage struct {
 // Describes the request when checking the access to a feature
 type AccessRequest struct {
 	Groups []string `json:"groups"`
-	User   uint32   `json:"user"`
+	User   string   `json:"user"`
 }
 
 func (handler APIHandler) FeatureIndex(w http.ResponseWriter, r *http.Request) {
@@ -250,7 +250,7 @@ func hasAccessToFeature(feature m.FeatureFlag, ar AccessRequest) bool {
 	}
 
 	// Access thanks to the user?
-	if ar.User > 0 {
+	if ar.User != "" {
 		return feature.UserHasAccess(ar.User)
 	}
 

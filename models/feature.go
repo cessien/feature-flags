@@ -19,7 +19,7 @@ type FeatureFlag struct {
 	// the Users, Groups and Percentage properties
 	Enabled bool `json:"enabled"`
 	// Gives access to a feature to specific user IDs
-	Users []uint32 `json:"users"`
+	Users []string `json:"users"`
 	// Gives access to a feature to specific groups
 	Groups []string `json:"groups"`
 	// Gives access to a feature to a percentage of users
@@ -62,7 +62,7 @@ func (f FeatureFlag) GroupHasAccess(group string) bool {
 }
 
 // UserHasAccess checks if a user has access to a feature
-func (f FeatureFlag) UserHasAccess(user uint32) bool {
+func (f FeatureFlag) UserHasAccess(user string) bool {
 	// A user has access:
 	// - if the feature is enabled
 	// - if the feature is partially enabled and he has been given access explicity
@@ -90,13 +90,13 @@ func (f FeatureFlag) hasPercentage() bool {
 }
 
 // Check if a user has access to the feature thanks to the percentage value
-func (f FeatureFlag) userIsAllowedByPercentage(user uint32) bool {
-	return crc32.ChecksumIEEE(helpers.Uint32ToBytes(user))%100 < f.Percentage
+func (f FeatureFlag) userIsAllowedByPercentage(user string) bool {
+	return crc32.ChecksumIEEE([]byte(user))%100 < f.Percentage
 }
 
 // Check if a user is in the list of allowed users
-func (f FeatureFlag) userInUsers(user uint32) bool {
-	return helpers.IntInSlice(user, f.Users)
+func (f FeatureFlag) userInUsers(user string) bool {
+	return helpers.StringInSlice(user, f.Users)
 }
 
 // Check if a group is in the list of allowed groups
