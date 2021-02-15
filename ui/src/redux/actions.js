@@ -47,7 +47,7 @@ export const updateFeatureUsers = (key, users) => ({
     }
 })
 
-export const setFeaturePercentage = (key, percentage) => ({
+export const updateFeaturePercentage = (key, percentage) => ({
     type: UPDATE_FEATURE_PERCENTAGE,
     payload: {
         key: key,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleFeature, updateFeatureGroups, updateFeatureUsers } from '../redux/actions';
+import { toggleFeature, updateFeatureGroups, updateFeatureUsers, updateFeaturePercentage } from '../redux/actions';
 import Api from '../redux/async';
 import AddBadge from './AddBadge';
 import Grid from '@material-ui/core/Grid';
@@ -17,6 +17,8 @@ import Switch from '@material-ui/core/Switch';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Input from '@material-ui/core/Input';
+import Slider from '@material-ui/core/Slider';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -76,15 +78,20 @@ const asyncToggleFeature = (feature) => {
     }
 }
 
-class Feature extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            addUserActive: false,
-            addGroupActive: false
-        };
+const asyncUpdateFeaturePercentage = (feature) => {
+    return function (dispatch) {
+        return Api.updateFeature(feature).then(
+            resp => {
+                resp.json().then(f => {
+                    dispatch(updateFeaturePercentage(feature.key, feature.percentage));
+                })
+            },
+            e => console.log(e)
+        );
     }
+}
 
+class Feature extends React.Component {
     handleToggle = (event) => {
         const f = {
             ...this.props.feature,
@@ -131,6 +138,14 @@ class Feature extends React.Component {
         this.props.asyncUpdateFeatureUsers(feature);
     }
 
+    handleUpdatePercentage = (event, value) => {
+        const f = {
+            ...this.props.feature,
+            percentage: value,
+        }
+        this.props.asyncUpdateFeaturePercentage(f);
+    }
+
     render() {
         const { classes, feature } = this.props;
 
@@ -149,8 +164,19 @@ class Feature extends React.Component {
             </Grid>
             <Grid item xs={10}>
                 <Grid container spacing={2}>
-                    <Grid item xs={8}><Typography component="div"><Box fontWeight="bold">{feature.key}</Box></Typography></Grid>
-                    <Grid item xs={4}><LinearProgress variant="determinate" value={feature.percentage} /></Grid>
+                    <Grid item xs={7}><Typography component="div"><Box fontWeight="bold">{feature.key}</Box></Typography></Grid>
+                    {/* <Grid item xs={4}><LinearProgress variant="determinate" value={feature.percentage} /></Grid> */}
+                    <Grid item xs={5}>
+                        <Slider
+                            defaultValue={feature.percentage}
+                            valueLabelDisplay="auto"
+                            step={10}
+                            marks
+                            min={0}
+                            max={100}
+                            onChangeCommitted={this.handleUpdatePercentage}
+                        />
+                    </Grid>
                     <Grid item xs={11}><Typography component="div"><Box className={classes.featureDescription}>{feature.description}</Box></Typography></Grid>
                     <Grid item xs={1}>
                         <IconButton size='medium' onClick={this.props.onDelete}>
@@ -178,4 +204,5 @@ export default withStyles(styles)(connect(mapStateToProps, {
     asyncUpdateFeatureGroups, 
     asyncUpdateFeatureUsers, 
     asyncToggleFeature,
+    asyncUpdateFeaturePercentage,
 })(Feature));
