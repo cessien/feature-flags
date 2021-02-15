@@ -73,12 +73,10 @@ class Feature extends React.Component {
         this.props.asyncUpdateFeatureGroups(feature);
     }
 
-    handleRemoveGroup = (group) => {
+    handleRemoveGroup = (group) => (event) => {
         const { feature } = this.props;
 
-        if (feature.groups.includes(group)) {
-            feature.groups = feature.groups.splice(0,1,group);
-        }
+        feature.groups.splice(feature.groups.indexOf(group),1);
 
         this.props.asyncUpdateFeatureGroups(feature);
     }
@@ -115,7 +113,7 @@ class Feature extends React.Component {
             <Grid item xs={1}><FilterListIcon /></Grid>
             <Grid item xs={10}>
                 <Box flexDirection="row">
-                    {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={console.log} className={classes.featureFilterListItem} />)}
+                    {feature.groups.map(g => <Chip icon={<GroupIcon />} key={g} color='primary' label={g} onDelete={this.handleRemoveGroup(g)} className={classes.featureFilterListItem} />)}
                     {feature.users.map(u => <Chip icon={u[0] === '-' ?<NoPersonIcon /> : <PersonIcon />} key={u} label={u.replace(/^-/,'')} onDelete={console.log} className={classes.featureFilterListItem} />)}
                     <AddBadge type="group" className={classes.featureFilterListItem} onCreate={this.handleAddGroup} />
                     <AddBadge type="user" className={classes.featureFilterListItem} />
