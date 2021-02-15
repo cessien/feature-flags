@@ -63,6 +63,19 @@ const asyncUpdateFeatureUsers = (feature) => {
     }
 }
 
+const asyncToggleFeature = (feature) => {
+    return function (dispatch) {
+        return Api.updateFeature(feature).then(
+            resp => {
+                resp.json().then(f => {
+                    dispatch(toggleFeature(feature.key, feature.enabled));
+                })
+            },
+            e => console.log(e)
+        );
+    }
+}
+
 class Feature extends React.Component {
     constructor(props) {
         super(props);
@@ -73,7 +86,11 @@ class Feature extends React.Component {
     }
 
     handleToggle = (event) => {
-        this.props.toggleFeature(this.props.feature.key, event.target.checked)
+        const f = {
+            ...this.props.feature,
+            enabled: event.target.checked,
+        }
+        this.props.asyncToggleFeature(f);
     }
 
     handleAddGroup = (group) => {
@@ -157,4 +174,8 @@ class Feature extends React.Component {
     }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { toggleFeature, asyncUpdateFeatureGroups, asyncUpdateFeatureUsers })(Feature));
+export default withStyles(styles)(connect(mapStateToProps, {
+    asyncUpdateFeatureGroups, 
+    asyncUpdateFeatureUsers, 
+    asyncToggleFeature,
+})(Feature));
