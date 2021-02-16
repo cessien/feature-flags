@@ -6,6 +6,7 @@ import { getAllFeatures } from './redux/selectors';
 import Api from './redux/async';
 import Header from './components/Header';
 import Feature from './components/Feature';
+import CreateFeaturebutton from './components/CreateFeatureButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
@@ -89,16 +90,8 @@ class App extends React.Component {
         <div className={classes.paper}>
           <Header />
           <List className={classes.featureList}>
-            <ListItem key={"add-feature"}>
-              <Button
-                color="primary"
-                size="large"
-                fullWidth={true}
-                startIcon={<AddIcon />}
-                onClick={this.handleAddFeature}
-              >
-                Create Feature
-              </Button>
+            <ListItem key={"add-feature"} >
+              <CreateFeaturebutton />
             </ListItem>
             {features && Object.keys(features).map((l,i) => <Feature key={l} row={l} feature={features[l]} onDelete={this.handleRemoveFeature(features[l])} />)}
           </List>
