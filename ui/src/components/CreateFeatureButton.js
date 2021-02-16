@@ -41,7 +41,7 @@ class CreateFeatureButton extends React.Component {
         return (<Button
             color="primary"
             size="large"
-            fullWidth={true}
+            // fullWidth={true}
             startIcon={<AddIcon />}
             onClick={() => { this.setState({ createMode: true, }) }}
           >
