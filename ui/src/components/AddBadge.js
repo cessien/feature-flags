@@ -77,6 +77,7 @@ class Addbadge extends React.Component {
                 break;
             case 'Escape':
                 this.cancelEdit();
+                break;
             default:
         }
     }

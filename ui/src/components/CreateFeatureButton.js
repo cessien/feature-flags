@@ -1,8 +1,6 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -41,7 +39,7 @@ class CreateFeatureButton extends React.Component {
         return (<Button
             color="primary"
             size="large"
-            // fullWidth={true}
+            fullWidth={true}
             startIcon={<AddIcon />}
             onClick={() => { this.setState({ createMode: true, }) }}
           >
@@ -50,7 +48,19 @@ class CreateFeatureButton extends React.Component {
     }
 
     handleClose = () => {
-        this.setState({createMode: false});
+        this.setState({
+            createMode: false,
+            key: "",
+            enabled: false,
+            description: "",
+        });
+    }
+
+    handleCreate = () => {
+        if (this.props.onCreate) {
+            this.props.onCreate(this.state.key, this.state.enabled, this.state.description);
+        }
+        this.handleClose();
     }
 
     renderFeaturePrompt = () => {
@@ -62,13 +72,16 @@ class CreateFeatureButton extends React.Component {
                     Create the feature key and description here. After creation you can edit the rollout progress, 
                     enablement, user and group inclusion lists.
                 </DialogContentText>
-                <TextField fullWidth={true} label="feature name" value={this.state.key} onChange={(e, value) => { this.setState({key: value}) }} />
-                <TextField fullWidth label="feature description" value={this.state.description} onChange={(e, value) => { this.setState({description: value}) }} />
-                <br />
-                <FormControlLabel fullWidth control={
+                <FormControlLabel control={
+                        <TextField value={this.state.key} onChange={(e) => { this.setState(s => ({ ...s, key: e.target.value})) }} />
+                    } label="feature name" />
+                <FormControlLabel control={
+                        <TextField value={this.state.description} onChange={(e) => { this.setState(s => ({ ...s, description: e.target.value})) }} />
+                    } label="feature description" />
+                <FormControlLabel control={
                         <Switch
                             checked={this.state.enabled}
-                            onChange={(event) => {this.setState({enabled: event.target.checked})}}
+                            onChange={(e) => { this.setState(s => ({ ...s, enabled: e.target.checked})) }}
                         />
                     } label={"The feature will default to " + (this.state.enabled ? "ON" : "OFF")} />
             </DialogContent>
@@ -76,7 +89,7 @@ class CreateFeatureButton extends React.Component {
                 <Button onClick={this.handleClose} color="secondary">
                     Cancel
                 </Button>
-                <Button onClick={this.handleClose} color="primary">
+                <Button onClick={this.handleCreate} color="primary">
                     Create
                 </Button>
             </DialogActions>
@@ -84,8 +97,6 @@ class CreateFeatureButton extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
-
         if (this.state.createMode === false) {
             return this.renderButton();
         } else {

@@ -6,13 +6,11 @@ import { getAllFeatures } from './redux/selectors';
 import Api from './redux/async';
 import Header from './components/Header';
 import Feature from './components/Feature';
-import CreateFeaturebutton from './components/CreateFeatureButton';
+import CreateFeatureButton from './components/CreateFeatureButton';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { List, ListItem } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   paper: {
@@ -62,19 +60,17 @@ class App extends React.Component {
     this.props.getFeatures();
   }
 
-  handleAddFeature = (event) => {
-    this.props.asyncAddFeature({
-      key: "app_some_other_feature_" + Math.floor(Math.random() * 10000),
-      description: "Some other feature we want to control",
-      enabled: Math.random() >= .2,
-      users: [
-      ],
-      groups: [
-        "beta-testers",
-        "experimental2"
-      ],
-      percentage: Math.floor(Math.random() * 100)
-    });
+  handleAddFeature = (key, enabled, description) => {
+    const feature = {
+      key: key,
+      description: description,
+      enabled: enabled,
+      users: [],
+      groups: [],
+      percentage: 0,
+    };
+
+    this.props.asyncAddFeature(feature);
   }
 
   handleRemoveFeature = (feature) => (event) => {
@@ -91,7 +87,7 @@ class App extends React.Component {
           <Header />
           <List className={classes.featureList}>
             <ListItem key={"add-feature"} >
-              <CreateFeaturebutton />
+              <CreateFeatureButton onCreate={this.handleAddFeature} />
             </ListItem>
             {features && Object.keys(features).map((l,i) => <Feature key={l} row={l} feature={features[l]} onDelete={this.handleRemoveFeature(features[l])} />)}
           </List>
