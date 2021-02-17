@@ -29,13 +29,31 @@ const mapStateToProps = state => {
   return { ...getAllFeatures(state) };
 }
 
+const asyncGetFeatures = () => {
+  return function (dispatch) {
+    return Api.getFeatures().then(
+      resp => {
+        resp.json().then(fs => {
+          const featuresMap = fs.reduce((result, v) => {
+            result[v.key] = v;
+
+            return result;
+          }, {})
+          dispatch(getFeatures(featuresMap));
+        });
+      },
+      e => console.log(e)
+    );
+  }
+}
+
 const asyncAddFeature = (feature) => {
   return function (dispatch) {
     return Api.addFeature(feature).then(
       resp => {
         resp.json().then(f => {
           dispatch(addFeature(f));
-        })
+        });
       },
       e => console.log(e)
     );
@@ -57,7 +75,7 @@ const asyncRemoveFeature = (feature) => {
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.getFeatures();
+    this.props.asyncGetFeatures();
   }
 
   handleAddFeature = (key, enabled, description) => {
@@ -97,4 +115,4 @@ class App extends React.Component {
   }
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { getFeatures, asyncAddFeature, asyncRemoveFeature })(App))
+export default withStyles(styles)(connect(mapStateToProps, { asyncGetFeatures, asyncAddFeature, asyncRemoveFeature })(App))

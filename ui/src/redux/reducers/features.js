@@ -72,7 +72,7 @@ export default function(state = initialState, action) {
     case GET_FEATURES: {
         return {
           ...state,
-          features: {...features}
+          ...action.payload
         };
     }
     case TOGGLE_FEATURE: {

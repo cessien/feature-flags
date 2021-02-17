@@ -13,8 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styles = theme => ({
     feature: {
-        paddingTop: '5em',
-        paddingBottom: '5em'
+        padding: '.5em',
     },
     featureDescription: {
         color: "#9C9C9C",
@@ -63,7 +62,16 @@ class CreateFeatureButton extends React.Component {
         this.handleClose();
     }
 
+    validateKey = (e) => {
+        this.setState(s => ({
+             ...s, 
+             key: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "_")
+        }));
+    }
+
     renderFeaturePrompt = () => {
+        const { classes } = this.props;
+
         return (
         <Dialog open={this.state.createMode} onClose={this.handleClose} >
             <DialogTitle>Create Feature</DialogTitle>
@@ -72,12 +80,12 @@ class CreateFeatureButton extends React.Component {
                     Create the feature key and description here. After creation you can edit the rollout progress, 
                     enablement, user and group inclusion lists.
                 </DialogContentText>
-                <FormControlLabel control={
-                        <TextField value={this.state.key} onChange={(e) => { this.setState(s => ({ ...s, key: e.target.value})) }} />
-                    } label="feature name" />
-                <FormControlLabel control={
-                        <TextField value={this.state.description} onChange={(e) => { this.setState(s => ({ ...s, description: e.target.value})) }} />
-                    } label="feature description" />
+                <FormControlLabel className={classes.feature} control={
+                        <TextField value={this.state.key} onChange={this.validateKey} />
+                    } label="FEATURE NAME" />
+                <FormControlLabel className={classes.feature} control={
+                        <TextField multiline rows={4} value={this.state.description} variant="outlined" onChange={(e) => { this.setState(s => ({ ...s, description: e.target.value})) }} />
+                    } label="FEATURE DESCRIPTION" />
                 <FormControlLabel control={
                         <Switch
                             checked={this.state.enabled}

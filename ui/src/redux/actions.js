@@ -18,9 +18,11 @@ export const removeFeature = feature => ({
     payload: feature,
 })
 
-export const getFeatures = () => ({
+export const getFeatures = (features) => ({
     type: GET_FEATURES,
-    payload: {},
+    payload: {
+        features,
+    },
 })
 
 export const toggleFeature = (key, status) => ({
