@@ -79,7 +79,7 @@ func TestUpdateFeature(t *testing.T) {
 	f, err := getService(db).UpdateFeature(newFeature.Key, newFeature)
 	assert.Nil(t, err)
 	assert.True(t, f.Enabled)
-	assert.Equal(t, f.Users, []uint32{1, 2})
+	assert.Equal(t, f.Users, []string{"a", "b"})
 	assert.Equal(t, f.Groups, []string{"c", "d"})
 	assert.Equal(t, f.Percentage, uint32(22))
 

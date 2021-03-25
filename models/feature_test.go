@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -140,4 +141,63 @@ func TestUserHasAccess(t *testing.T) {
 	f.Percentage = 100
 	f.Enabled = false
 	assert.True(t, f.UserHasAccess("tod"))
+}
+
+func TestUserNameHasAccessPercentage(t *testing.T) {
+	f := FeatureFlag{
+		Key:        "foo",
+		Enabled:    false,
+		Users:      []string{},
+		Groups:     []string{},
+		Percentage: 50,
+	}
+	// Make sure the feature is not enabled
+	assert.False(t, f.IsEnabled())
+
+	users := []string{"aaron", "bryan", "charlie", "dennis", "elaine", "fiona", "gertude", "hermoine",
+		"indigo", "julia", "kingsley", "liam", "mary", "nancy", "olaf", "penelope", "quincy", "rowen",
+		"shelly", "tyson", "usain", "vivek", "winston", "xander", "yolanda", "zulu"}
+
+	var allowedCount int
+	var deniedCount int
+
+	for _, user := range users {
+		if f.UserHasAccess(user) {
+			allowedCount = allowedCount + 1
+		} else {
+			deniedCount++
+		}
+	}
+
+	assert.LessOrEqual(t, 100.0*allowedCount/len(users), 60, "50% target should have 50% users")
+	assert.GreaterOrEqual(t, 100.0*allowedCount/len(users), 40, "50% target should have 50% users")
+}
+
+func TestUserIDHasAccessPercentage(t *testing.T) {
+	f := FeatureFlag{
+		Key:        "foo",
+		Enabled:    false,
+		Users:      []string{},
+		Groups:     []string{},
+		Percentage: 50,
+	}
+
+	users := []string{}
+	for i := 0; i < 1000; i++ {
+		users = append(users, strconv.Itoa(18210+i))
+	}
+
+	var allowedCount int
+	var deniedCount int
+
+	for _, user := range users {
+		if f.UserHasAccess(user) {
+			allowedCount = allowedCount + 1
+		} else {
+			deniedCount++
+		}
+	}
+
+	assert.LessOrEqual(t, 100.0*allowedCount/len(users), 55, "50% target should have 50% users")
+	assert.GreaterOrEqual(t, 100.0*allowedCount/len(users), 45, "50% target should have 50% users")
 }
