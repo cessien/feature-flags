@@ -26,12 +26,8 @@ func NewRouter(api APIHandler) *mux.Router {
 	}
 
 	router.
-		Path("/index.html").
-		Handler(http.FileServer(http.Dir("." + staticDir + "index.html")))
-
-	// router.
-	// 	PathPrefix("/").
-	// 	Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
+		PathPrefix("/").
+		Handler(http.FileServer(http.Dir("." + staticDir)))
 
 	return router
 }
