@@ -91,7 +91,7 @@ class CreateFeatureButton extends React.Component {
                             checked={this.state.enabled}
                             onChange={(e) => { this.setState(s => ({ ...s, enabled: e.target.checked})) }}
                         />
-                    } label={"The feature will default to " + (this.state.enabled ? "ON" : "OFF")} />
+                    } label={"The feature will default to " + (this.state.enabled ? "MAX ON" : "PARTIAL")} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={this.handleClose} color="secondary">

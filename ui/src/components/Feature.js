@@ -164,7 +164,7 @@ class Feature extends React.Component {
                     checked={feature.enabled}
                     onChange={this.handleToggle}
                     />
-                } label={feature.enabled ? "ON" : "OFF"} />
+                } label={feature.enabled ? "MAX ON" : "PARTIAL"} />
                 </FormGroup>
             </Grid>
             <Grid item xs={10}>
