@@ -6,6 +6,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const staticDir string = "/ui/build/"
+
 // Bind routes to handlers and create a router
 func NewRouter(api APIHandler) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
@@ -22,6 +24,14 @@ func NewRouter(api APIHandler) *mux.Router {
 			Name(route.Name).
 			Handler(handler)
 	}
+
+	router.
+		Path("/index.html").
+		Handler(http.FileServer(http.Dir("." + staticDir + "index.html")))
+
+	// router.
+	// 	PathPrefix("/").
+	// 	Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
 
 	return router
 }

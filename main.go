@@ -4,12 +4,14 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/boltdb/bolt"
 	db "github.com/cessien/feature-flags/db"
 	h "github.com/cessien/feature-flags/http"
 	s "github.com/cessien/feature-flags/services"
+	"github.com/gorilla/handlers"
 )
 
 func main() {
@@ -33,5 +35,6 @@ func main() {
 
 	// Create and listen for the HTTP server
 	router := h.NewRouter(api)
-	log.Fatal(http.ListenAndServe(*address, router))
+	loggedRouter := handlers.LoggingHandler(os.Stdout, router)
+	log.Fatal(http.ListenAndServe(*address, loggedRouter))
 }
