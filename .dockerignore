@@ -1,6 +1,9 @@
 bolt.db
 feature-flags
 .DS_Store
+VERSION
+
+clients/
 
 ui/node_modules
 ui/.pnp
