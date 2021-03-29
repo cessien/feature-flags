@@ -168,6 +168,20 @@ func TestEditFeatureFlag(t *testing.T) {
 	res, _ = http.DefaultClient.Do(request)
 
 	assertResponseWithStatusAndMessage(t, res, http.StatusBadRequest, "invalid_feature", "Percentage must be between 0 and 100")
+
+	// Edit with zero as a percentage
+	reader = strings.NewReader(`{"percentage":0}`)
+	request, _ = http.NewRequest("PATCH", fmt.Sprintf("%s/%s", base, "homepage_v2"), reader)
+	res, _ = http.DefaultClient.Do(request)
+
+	assertJSONMatchesStructure(
+		t, res,
+		"homepage_v2",
+		true,
+		[]string{"a", "b"},
+		[]string{"a", "b"},
+		0,
+	)
 }
 
 func TestAccessFeatureFlags(t *testing.T) {

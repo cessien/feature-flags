@@ -69,7 +69,7 @@ func (interactor *FeatureService) UpdateFeature(featureKey string, newFeature m.
 			feature.Groups = newFeature.Groups
 		}
 
-		if newFeature.Percentage > 0 {
+		if newFeature.Percentage >= 0 {
 			feature.Percentage = newFeature.Percentage
 		}
 
